@@ -30,9 +30,9 @@ jobs:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         run: |
-          echo "${EC2_SSH_PRIVATE_KEY}" > kunj22.pem
-          chmod 600 kunj22.pem
-          ssh -o StrictHostKeyChecking=no -i kunj22.pem ubuntu@${EC2_HOST} << 'EOF'
+          echo "${EC2_SSH_PRIVATE_KEY}" > kunj-22.pem
+          chmod 600 kunj-22.pem
+          ssh -o StrictHostKeyChecking=no -i kunj-22.pem ubuntu@${EC2_HOST} << 'EOF'
             docker pull kunj22/kk:v1.0
             docker stop project || true
             docker rm project || true
