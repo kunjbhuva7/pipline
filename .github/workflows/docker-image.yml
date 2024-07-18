@@ -23,16 +23,33 @@ jobs:
         run: docker build -t kunj22/kk:v1.0 .
 
       - name: Push Docker image
-        run: docker push kunj22/kk:v1.0
+        run: docker push kunj22/kk:v1.0 
+  
+    steps:
+      - name: SSH and deploy
+        env:
+          EC2_PUBLIC_IP: ${{ secrets.EC2_HOST }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          
+        run: |
+          echo "${EC2_SSH_KEY}" > kunj22.pem
+          chmod 600 dockerhub.pem
+          
+          ssh -o StrictHostKeyChecking=no -i kunj22.pem ubuntu@${EC2_HOST} << 'EOF'
+            docker pull kunj22/kk:v1.0:main
+            docker stop project || true
+            docker rm project || true
+            docker run -d --name project -p 80:80 kunj22/kk:v1.0:main
+          EOF
 
-      - name: SSH into EC2 instance and deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            docker pull kunj22/kk:v1.0
-            docker stop my-container || true
-            docker rm my-container || true
-            docker run -d --name my-container -p 80:5000 kunj22/kk:v1.0
+      # - name: SSH into EC2 instance and deploy
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USERNAME }}
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     script: |
+      #       docker pull kunj22/kk:v1.0
+      #       docker stop my-container || true
+      #       docker rm my-container || true
+      #       docker run -d --name my-container -p 80:5000 kunj22/kk:v1.0
