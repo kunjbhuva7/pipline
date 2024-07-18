@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t my-python-app .
+        run: docker build -t pipline .
 
       - name: Push Docker image
         run: docker push my-python-app
@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker pull my-python-app
+            docker pull pipline
             docker stop my-container || true
             docker rm my-container || true
-            docker run -d --name my-container -p 80:5000 my-python-app
+            docker run -d --name my-container -p 80:5000 pipline
