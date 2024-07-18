@@ -27,8 +27,8 @@ jobs:
 
       - name: SSH and deploy
         env:
-          EC2_PUBLIC_IP: ${{ secrets.EC2_HOST }}
-          EC2_SSH_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         run: |
           echo "${EC2_SSH_PRIVATE_KEY}" > kunj22.pem
           chmod 600 kunj22.pem
