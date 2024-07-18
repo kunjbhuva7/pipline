@@ -36,5 +36,5 @@ jobs:
             docker pull kunj22/kk:v1.0
             docker stop project || true
             docker rm project || true
-            docker run -d --name project -p 80:80 kunj22/kk:v1.0
+            docker run -d --name project -p 5000:80 kunj22/kk:v1.0
           EOF
