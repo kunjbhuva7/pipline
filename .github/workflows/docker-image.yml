@@ -20,10 +20,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t pipline .
+        run: docker build -t kunj22/kk:v1.0 .
 
       - name: Push Docker image
-        run: docker push my-python-app
+        run: docker push kunj22/kk:v1.0
 
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@master
@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker pull pipline
+            docker pull kunj22/kk:v1.0
             docker stop my-container || true
             docker rm my-container || true
-            docker run -d --name my-container -p 80:5000 pipline
+            docker run -d --name my-container -p 80:5000 kunj22/kk:v1.0
